@@ -4,15 +4,15 @@ function Game(parentElement) {                      //parent element = whatsOnSc
     this.parentElement = parentElement;
     this.gameScreenElement = null;
     this.callbackEnd = null;
-    this.cheating = false;
-    this.dontDoThisAgainThisIsCheating = false
-    //this.gameOverButton = null;
+    this.blur = false;
+    this.saturate = false
 }
 
 Game.prototype.onEnded = function (callback) {
     this.callbackEnd = callback;
 }
 
+// creating a game screen
 Game.prototype.build = function () {
     var self = this;
 
@@ -34,19 +34,19 @@ Game.prototype.build = function () {
     <div class="container">
         <div class="row">
             
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card1"></div>
             </div>
             
-            <div class="col-sm-3">
-                <div class="card" id="card2"></div>    
+            <div class="col-3">
+              <div class="card" id="card2"></div>    
             </div>
             
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card3"></div>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card4"></div>
             </div>
 
@@ -54,19 +54,19 @@ Game.prototype.build = function () {
         <br>
         <div class="row">
 
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card5"></div>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card6" ></div>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card7" ></div>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card8"></div>
             </div>
 
@@ -74,19 +74,19 @@ Game.prototype.build = function () {
         <br>
         <div class="row">
         
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card9"></div>
             </div>
         
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card10"></div>
             </div>
         
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card11"></div>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-3">
                 <div class="card" id="card12"></div>
             </div>
         
@@ -100,11 +100,12 @@ Game.prototype.build = function () {
     self.buttonThing.addEventListener('click', function () {
         document.getElementById("nextLevel").style.display = "none";
 
-        if (!self.cheating){
-            self.cheating = true;
+        if (!self.blur){
+            self.blur = true;
             document.getElementById("gameScreen").style.filter = "blur(2px)";
-        } else if (!self.dontDoThisAgainThisIsCheating) {
-            self.dontDoThisAgainThisIsCheating = true;
+        } 
+        else if (!self.saturate) {
+            self.saturate = true;
             document.getElementById("gameScreen").style.filter = "saturate(10) blur(4px)";
         }
 
@@ -117,6 +118,7 @@ Game.prototype.setup = function () {
     var cardsElement = document.querySelectorAll('.card');  // array-like object of all card classes
     var cards = [...cardsElement];
     var openedCards = [];
+    var lastArrayElement;
     var collectedPairs = [];
     var comparison = null;
     var alcoholLevel = 0; 
@@ -125,6 +127,8 @@ Game.prototype.setup = function () {
     var flipBacksound = new Audio('sounds/flip.mp3'); 
     var levelUp = new Audio("sounds/level-up.mp3");
 
+    
+    // shuffle card's pictures
     function shuffleCards(array) {
 
         var currentIndex = array.length, temporaryValue, randomIndex;
@@ -142,10 +146,11 @@ Game.prototype.setup = function () {
     shuffleCards(cards); 
 
     // setting the images pictures    
-    var IMAGES = ["images/plzen.jpg", "images/kozel.jpg", "images/staropramen.jpg", "images/zubr.png", "images/holba.jpg", "images/radegast.jpg"]
+    var IMAGES = ["images/plzen.jpg", "images/kozel.jpg", "images/staropramen.jpg", "images/zubr.png", "images/holba.jpg",
+     "images/radegast.jpg"]
 
     function setupCards() {
-        // assinging images and positions(class) to card objects
+        // assinging images and positions to card objects
         var imgIdx = 0;
         for (var i = 0; i < cards.length; i += 2) {
             var img = IMAGES[imgIdx];
@@ -155,21 +160,20 @@ Game.prototype.setup = function () {
             newCardOne.onClick(cardOpen);
             newCardTwo.onClick(cardOpen);
             imgIdx++;
-
-            //cards.push(newCardOne, newCardTwo);  // adding new cards object to the cards array         
         }
     }
+
     setupCards();
 
-
-
-
     // comparing the values
+    // @todo openedCards.lenght-1[value] cannot be clicked again!
     function cardOpen() {
 
         if (comparison === null) {
             openedCards.push(this);            // add opened Card to the array of openedCards
-            this.flip();                      // flip this opened Card
+            this.flip();                      // flip(open) this selected Card
+     /*        lastArrayElement = openedCards[openedCards.length - 1]
+            document.getElementById(this.element.id).disabled = true; */
 
             if (openedCards.length === 2) {
                 comparison = true;          // two cards are in the process of comparison 
@@ -188,6 +192,12 @@ Game.prototype.setup = function () {
                         document.getElementById("statusScreen").innerHTML = "TIPSY";
                         document.getElementById("nextLevel").style.display = "block";
                         levelUp.play();
+
+                        // stop music when closing the modal
+                        document.getElementById("close").onclick = function (evt) {
+                            levelUp.pause();
+                        };
+
                     }
                     
                     if (alcoholLevel === 1.6){
@@ -195,6 +205,11 @@ Game.prototype.setup = function () {
                         document.getElementById("statusScreen").innerHTML = "WASTED"; 
                         document.getElementById("nextLevel").style.display = "block";
                         levelUp.play();
+
+                        // stop music when closing the modal
+                        document.getElementById("close").onclick = function (evt) {
+                            levelUp.pause();
+                        };
                     }
 
                     if (collectedPairs.length === 12) {
@@ -202,7 +217,6 @@ Game.prototype.setup = function () {
                     }
                 }
                 else {
-                    //console.log("NO");
                     flipBacksound.play();
                     window.setTimeout(function () {
                         openedCards[0].flipBack();

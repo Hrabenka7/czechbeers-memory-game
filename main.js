@@ -88,10 +88,10 @@ function main() {
         gameOverScreenElement.remove();
         restartGameButtonElement.removeEventListener('click', handleRestartClick);
     }
-    // -- start the app
-
+    
+    // -- start the app again
     buildStartScreen();
-   //buildGameOverScreen();
+ 
 }
 
 window.addEventListener('load', main);

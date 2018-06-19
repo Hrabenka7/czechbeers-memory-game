@@ -4,6 +4,7 @@
 /* ---- reset ---- */
 html {
   box-sizing: border-box;
+  font-size: 63%;
 }
 
 *, *:before, *:after {
@@ -26,10 +27,9 @@ body {
   
 }
 #startScreen-text h2{
-font-size: 90px;
+font-size: 6rem;
 text-shadow: 2px 2px 8px black;
 font-weight: 600;
-
 }
 
 .czech{
@@ -40,6 +40,13 @@ font-weight: 600;
   color:#E50026;
 }
 
+
+@media (min-width: 768px) { 
+  #startScreen-text h2 {
+    font-size: 9rem;
+  }
+}
+
 #startScreen-button{
   padding: 20px 30px;
   margin-top: 70px;
@@ -48,7 +55,7 @@ font-weight: 600;
   border: 2px solid wheat;
   border-radius: 12px;
   font-family: 'Ubuntu', sans-serif;
-  font-size: 20px;
+  font-size: 3rem;
   text-align: center;
   display: inline-block;
 }
@@ -56,17 +63,14 @@ font-weight: 600;
 #startScreen-button:hover{
   cursor: pointer;
   background-color: rgb(237, 131, 26);
-  
+  color: black; 
 }
 
-#startScreen-button h3:hover{
-  font-size: 32px;
-}
 
 /* ######################## GAME SCREEN ################# */
 
 .container{
-  padding: 40px;
+  padding: 30px;
 }
 
 h1{
@@ -86,10 +90,31 @@ font-family: 'Exo 2', sans-serif !important;
 .card{
   width: 200px;
   height: 200px;
-  text-align: center;
   background-image: url("images/blu.png");
   background-position: center;
   background-size: cover;
+}
+
+
+@media (max-width: 1000px) { 
+  .card{
+    width: 160px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 800px) { 
+  .card{
+    width: 130px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 576px) { 
+  .card{
+    width: 90px;
+    height: 90px;
+  }
 }
 
 .modal {
