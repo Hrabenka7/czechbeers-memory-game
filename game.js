@@ -106,7 +106,7 @@ Game.prototype.build = function () {
         } 
         else if (!self.saturate) {
             self.saturate = true;
-            document.getElementById("gameScreen").style.filter = "saturate(10) blur(4px)";
+            document.getElementById("gameScreen").style.filter = "saturate(10) blur(2px)";
         }
 
     })
@@ -196,6 +196,7 @@ Game.prototype.setup = function () {
                         // stop music when closing the modal
                         document.getElementById("close").onclick = function (evt) {
                             levelUp.pause();
+                            levelUp.load();
                         };
 
                     }
@@ -209,6 +210,7 @@ Game.prototype.setup = function () {
                         // stop music when closing the modal
                         document.getElementById("close").onclick = function (evt) {
                             levelUp.pause();
+                            
                         };
                     }
 
